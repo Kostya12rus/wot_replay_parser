@@ -40,8 +40,12 @@ class ReplayWotParse(object):
         header = self.full_replay.read(len(b"\x12\x32\x34\x11\x02\x00\x00\x00"))
         json_block_count = header[4]
         for i in range(json_block_count):
-            length = self.read_replay_head_length()
-            self.data_head.append(json.loads(self.full_replay.read(length)))
+            try:
+                length = self.read_replay_head_length()
+                json_data = json.loads(self.full_replay.read(length))
+                self.data_head.append(json_data)
+            except:
+                pass
         if len(self.data_head) == 2:
             self.is_full_match = True
 
